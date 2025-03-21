@@ -1,0 +1,293 @@
+﻿@model UserProfile
+@{
+    ViewData["Title"] = "Profile Page";
+}
+<style>
+    body {
+        background-color: #413839;
+        color: #ffd700;
+        font-family: Arial, sans-serif;
+    }
+
+    .profile-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #1a1a1a;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .profile-image-container {
+        width: 250px;
+        height: 250px;
+        background-color: lightgray;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-right: 20px;
+        flex-shrink: 0;
+    }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+    .profile-info {
+        flex-grow: 1;
+        color: #ffd700;
+    }
+
+    .profile-header {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .profile-header h1 {
+            margin: 0;
+            color: #ffd700;
+        }
+
+        .profile-header p {
+            font-size: 1.2em;
+            color: #ffd700;
+        }
+
+    .profile-info p {
+        margin: 10px 0;
+        font-size: 1em;
+    }
+
+    .profile-info strong {
+        font-weight: bold;
+    }
+
+    .edit-profile-container {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+        .edit-profile-container button {
+            background-color: #000;
+            color: #ffd700;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .edit-profile-container button:hover {
+                background-color: #ffd700;
+                color: #000;
+            }
+
+    .edit-profile-form {
+        /* Initially hidden */
+        margin-top: 20px;
+        background-color: #1a1a1a;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+        .edit-profile-form input,
+        .edit-profile-form textarea {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+            .edit-profile-form input[type="file"] {
+                margin-top: 20px;
+            }
+
+    .gallery {
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 20px;
+        background-color: #1a1a1a;
+    }
+
+    .gallery-item {
+        width: 250px;
+        height: 250px;
+        background-color: lightgray;
+        border: 15px solid white;
+        border-radius: 20px;
+        display: inline-grid;
+        margin: 5px;
+        position: relative;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .gallery-item img {
+            width: 100%;
+            margin: auto;
+            border-radius: 20px;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-color: #ffd700;
+        }
+
+            .gallery-item:hover img {
+                transform: scale(1.1);
+            }
+
+        .gallery-item a {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ffd700;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+            .gallery-item a:hover {
+                color: #ff6347;
+            }
+
+    /* This rule applies only to the file upload input */
+    #fileUploadInput {
+        display: none;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-image-container">
+        <img src="~/Uploads/@Model.ProfileImage" alt="Profile Image" />
+    </div>
+
+    <div class="container">
+        <!-- Row 1 -->
+        <div class="field-group">
+            <span class="field-label">Name:</span>
+            <div class="field-value">@Model.Name</div>
+        </div>
+        <div class="field-group">
+            <span class="field-label">Nationality:</span>
+            <div class="field-value">@Model.Nationality</div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="field-group">
+            <span class="field-label">Age:</span>
+            <div class="field-value">@Model.Age</div>
+        </div>
+        <div class="field-group">
+            <span class="field-label">Religion:</span>
+            <div class="field-value">@Model.Religion</div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="field-group">
+            <span class="field-label">Gender:</span>
+            <div class="field-value">@Model.Gender</div>
+        </div>
+        <div class="field-group">
+            <span class="field-label">Contact:</span>
+            <div class="field-value">@Model.Contact</div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="field-group">
+            <span class="field-label">Birthday:</span>
+            <div class="field-value">@Model.Birthday</div>
+        </div>
+        <div class="field-group">
+            <span class="field-label">Address:</span>
+            <div class="field-value">@Model.Address</div>
+        </div>
+
+        <!-- Full width sections -->
+        <div class="field-group full-width">
+            <span class="field-label">About me:</span>
+            <div class="about-field">@Model.About_me</div>
+        </div>
+
+        <div class="field-group full-width">
+            <span class="field-label">Lifestyle:</span>
+            <div class="about-field">@Model.Lifestyle</div>
+        </div>
+
+        <div class="edit-profile-container">
+            <button type="button" onclick="toggleEditProfile()">Edit Profile</button>
+        </div>
+    </div>
+</div>
+
+<!-- Minimal change: Remove extra '<' so that the form is parsed correctly -->
+<div id="fileUploadForm" class="edit-profile-form">
+    <form method="post" enctype="multipart/form-data" action="/Home/UpdateProfile">
+        <input type="hidden" name="OriginalUsername" value="@Model.Username" />
+
+        <label for="fileUploadInput">Upload New Profile Image</label>
+        <input id="fileUploadInput" type="file" name="ProfileImage" accept="image/*" />
+
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input type="text" name="Username" class="form-control" required>
+        </div>
+
+        <label class="label" for="Name">
+            Name:
+            <input type="text" name="Name" class="input-field" value="@Model.Name">
+        </label>
+        <label class="full-width" for="Nationality">
+            Nationality:
+            <input type="text" name="Nationality" class="input-field" value="@Model.Nationality">
+        </label>
+        <label class="label" for="Age">
+            Age:
+            <input type="text" name="Age" class="input-field" value="@Model.Age">
+        </label>
+        <label class="full-width" for="Religion">
+            Religion:
+            <input type="text" name="Religion" class="input-field" value="@Model.Religion">
+        </label>
+        <label class="label" for="Gender">
+            Gender:
+            <input type="text" name="Gender" class="input-field" value="@Model.Gender">
+        </label>
+        <label class="full-width" for="Contact">
+            Contact:
+            <input type="text" name="Contact" class="input-field" value="@Model.Contact">
+        </label>
+        <label class="label" for="Birthday">
+            Birthday:
+            <input type="text" name="Birthday" class="input-field" value="@Model.Birthday">
+        </label>
+        <label class="full-width" for="Address">
+            Address:
+            <input type="text" name="Address" class="input-field" value="@Model.Address">
+        </label>
+        <label class="label">About me:</label>
+        <textarea name="About_me" rows="10">@Model.About_me</textarea>
+        <label class="full-width">Lifestyle:</label>
+        <textarea name="Lifestyle" rows="10">@Model.Lifestyle</textarea>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+<script>
+    // Ensure the form starts hidden by setting its inline style on page load.
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("fileUploadForm").style.display = "none";
+    });
+
+    function toggleEditProfile() {
+        var form = document.getElementById('fileUploadForm');
+        var currentDisplay = form.style.display || window.getComputedStyle(form).display;
+        form.style.display = currentDisplay === 'none' ? 'block' : 'none';
+    }
+</script>

@@ -1,0 +1,122 @@
+﻿@model CommentsViewModel
+
+<style>
+    body {
+        background-color: #413839;
+        color: #ffd700;
+    }
+
+    .comment-section {
+        margin: 0px;
+        padding: 10px;
+        border: 1px solid #ffd700;
+        border-radius: 10px;
+        margin-top: 20px;
+        background-color: black;
+    }
+
+        .comment-section li {
+            list-style: none;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid coral;
+            border-radius: 10px;
+            background-color: #1a1a1a;
+            color: #ffd700;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+
+            .comment-section li:hover {
+                background-color: #333;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+                transform: scale(1.02);
+            }
+
+            .comment-section li h5 {
+                color: steelblue;
+            }
+
+            .comment-section li p {
+                border-left: solid 5px black;
+                padding: 10px;
+                margin: 0px;
+            }
+
+    #txtComment {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ffd700;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px pink;
+        resize: none;
+        outline: none;
+        background-color: #333333;
+        color: #ffd700;
+        transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+
+        #txtComment:focus {
+            border-color: #e6b800;
+            box-shadow: 0 0 10px rgba(230, 184, 0, 0.5);
+        }
+
+        #txtComment:hover {
+            border-color: #e6b800;
+            box-shadow: 0 0 10px rgba(230, 184, 0, 0.5);
+            transform: scale(1.02);
+        }
+
+    #btnSaveComment, #btnSaveBlog {
+        background-color: #ffd700;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0px 0px 10px teal;
+        transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    }
+
+        #btnSaveComment:hover, #btnSaveBlog:hover {
+            background-color: #e6b800;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+    #formContainer {
+        margin-bottom: 20px;
+    }
+</style>
+<div id="formContainer">
+    <form method="get" action="/Home/SaveComment">
+        <h3 style="color: yellow; text-shadow: 5px 5px 5px #000000;">
+            <i class="fa fa-comment"></i>
+            Write a Comment
+        </h3>
+        <textarea id="txtComment" name="Comment" rows="10" placeholder="Type your comment here..."></textarea>
+        <div style="text-align:right">
+            <button id="btnSaveComment" class="btn yellow-btn" type="submit">
+                <i class="fa fa-save"></i>
+                Save Comment
+            </button>
+        </div>
+    </form>
+</div>
+
+<ul class="comment-section">
+    @foreach (var fil in System.IO.Directory.GetFiles("Comments"))
+    {
+        var comCont = File.ReadAllText(fil);
+
+        <li>
+            <h5>
+                <i class="fa fa-user-ninja"></i>
+                @System.IO.Path.GetFileNameWithoutExtension(fil)
+                <a href="/Home/DeleteComment?TargeFile=@System.IO.Path.GetFileName(fil)" style="color:red;float:right">
+                    <i class="fa fa-times"></i>
+                </a>
+            </h5>
+            <p>@comCont</p>
+        </li>
+    }
+</ul>
