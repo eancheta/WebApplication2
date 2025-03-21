@@ -164,7 +164,12 @@
 
 <div class="profile-container">
     <div class="profile-image-container">
-        <img src="~/Uploads/@Model.ProfileImage" alt="Profile Image" />
+        @foreach (var myphoto in Model.ProfileImage)
+        {
+            <div class="gallery-item">
+                <img src="~/Uploads/@myphoto" />
+            </div>
+        }
     </div>
 
     <div class="container">
